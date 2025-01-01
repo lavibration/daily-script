@@ -1,16 +1,18 @@
 import yfinance as yf
 import pandas as pd
-import json
+import os
 
 # Paramètres
 ema_periods = list(range(60, 321, 10))
 rolling_window = 60
 tolerance = 0.01
 input_file = "Euronext_Tickers.xlsx"  # Nom du fichier Excel dans le dépôt
-output_json = "results.json"
-output_html = "results.html"
+output_html = "output/results.html"  # Fichier HTML généré
 long_term_ema_min_period = 220
 volume_threshold = 5000
+
+# Assurer que le répertoire de sortie existe
+os.makedirs(os.path.dirname(output_html), exist_ok=True)
 
 # Charger les tickers et leurs noms depuis le fichier Excel
 tickers_df = pd.read_excel(input_file)
@@ -107,11 +109,6 @@ for ticker in tickers:
         })
     except Exception as e:
         print(f"Erreur pour {ticker} ({name}): {e}")
-
-# Exporter les résultats au format JSON
-with open(output_json, 'w') as f:
-    json.dump(results, f, indent=4)
-print(f"Résultats enregistrés dans {output_json}.")
 
 # Exporter les résultats au format HTML
 results_df = pd.DataFrame(results)
