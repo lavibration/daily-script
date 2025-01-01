@@ -115,3 +115,4 @@ for ticker in tickers:
 results_df = pd.DataFrame(results)
 results_df.to_html(output_html, index=False)
 print(f"Résultats enregistrés dans {output_html}.")
+print(f"Contenu du répertoire {output_dir}: {os.listdir(output_dir)}")
