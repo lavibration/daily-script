@@ -1,29 +1,34 @@
-name: Daily Script Execution
+name: Analyse EMA
 
 on:
   schedule:
-    - cron: '0 20 * * *'  # Exécute tous les jours à 20h UTC (21h heure de Paris en hiver
-  workflow_dispatch:
+    - cron: '0 20 * * *' # Planification quotidienne à 20h (UTC)
+  workflow_dispatch: # Permet aussi d'exécuter manuellement le workflow
 
 jobs:
-  run:
+  analysis:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-      # Cloner le code du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
-      # Installer Python
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt || echo "No dependencies to install"
-      # Installer les dépendances si un fichier requirements.txt existe
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Run script
-      run: python SupportEMA.py
-  
+      - name: Run analysis
+        run: python scripts/analyse_ema.py
+
+      - name: Upload results
+        uses: actions/upload-artifact@v3
+        with:
+          name: ema-results
+          path: |
+            results.json
+            results.html
