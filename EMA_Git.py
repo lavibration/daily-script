@@ -6,7 +6,7 @@ import json
 ema_periods = list(range(60, 321, 10))
 rolling_window = 60
 tolerance = 0.01
-input_file = "tickers.xlsx"  # Nom du fichier Excel dans le dépôt
+input_file = "Euronext_Tickers.xlsx"  # Nom du fichier Excel dans le dépôt
 output_json = "results.json"
 output_html = "results.html"
 long_term_ema_min_period = 220
