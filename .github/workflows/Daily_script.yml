@@ -23,7 +23,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run analysis
-        run: python scripts/analyse_ema.py
+        run: python scripts/EMA_Git.py
 
       - name: Upload results
         uses: actions/upload-artifact@v3
