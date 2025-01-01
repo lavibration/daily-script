@@ -25,12 +25,12 @@ jobs:
       - name: Run analysis
         run: python scripts/EMA_Git.py
 
-      - name: Upload results
-        uses: actions/upload-artifact@v3
-        with:
-          name: ema-results
-          path: |
-            output/results.html
+      - name: Verify output file
+        run: |
+          if [ ! -f "output/results.html" ]; then
+            echo "Error: output/results.html not found!"
+            exit 1
+          fi
 
   deploy:
     needs: analysis
@@ -39,13 +39,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js (Required by GitHub Pages)
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: output
+          publish_branch: gh-pages
