@@ -1,0 +1,28 @@
+name: Daily Script Execution
+
+on:
+  schedule:
+    - cron: '0 20 * * *'  # Exécute tous les jours à 20h UTC (21h heure de Paris en hiver)
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      # Cloner le code du dépôt
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+      # Installer Python
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt || echo "No dependencies to install"
+      # Installer les dépendances si un fichier requirements.txt existe
+
+    - name: Run script
+      run: python SupportEMA.py
+  
