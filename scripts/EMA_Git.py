@@ -1,6 +1,7 @@
 import yfinance as yf
 import pandas as pd
 import os
+import sys
 
 # Paramètres
 ema_periods = list(range(60, 321, 10))
@@ -13,13 +14,26 @@ long_term_ema_min_period = 220
 volume_threshold = 5000
 
 # Créer le répertoire de sortie s'il n'existe pas
-os.makedirs(output_dir, exist_ok=True)
+try:
+    os.makedirs(output_dir, exist_ok=True)
+    print(f"Répertoire '{output_dir}' créé ou existant.")
+except Exception as e:
+    print(f"Erreur lors de la création du répertoire '{output_dir}': {e}")
+    sys.exit(1)
 
 # Charger les tickers et leurs noms depuis le fichier Excel
-tickers_df = pd.read_excel(input_file)
-tickers_with_names = tickers_df[['Ticker', 'Name']].dropna()
-tickers_dict = tickers_with_names.set_index('Ticker')['Name'].to_dict()
-tickers = list(tickers_dict.keys())
+try:
+    tickers_df = pd.read_excel(input_file)
+    tickers_with_names = tickers_df[['Ticker', 'Name']].dropna()
+    tickers_dict = tickers_with_names.set_index('Ticker')['Name'].to_dict()
+    tickers = list(tickers_dict.keys())
+    print("Fichier des tickers chargé avec succès.")
+except FileNotFoundError:
+    print(f"Fichier '{input_file}' introuvable. Assurez-vous qu'il est présent dans le dépôt.")
+    sys.exit(1)
+except Exception as e:
+    print(f"Erreur lors du chargement du fichier Excel : {e}")
+    sys.exit(1)
 
 # Fonction de calcul du Z-Score
 def calculate_z_score(data, ema):
@@ -111,8 +125,16 @@ for ticker in tickers:
     except Exception as e:
         print(f"Erreur pour {ticker} ({name}): {e}")
 
+# Vérifier les résultats
+if not results:
+    print("Aucun résultat disponible. Vérifiez vos données d'entrée.")
+    sys.exit(1)
+
 # Exporter les résultats au format HTML
-results_df = pd.DataFrame(results)
-results_df.to_html(output_html, index=False)
-print(f"Résultats enregistrés dans {output_html}.")
-print(f"Contenu du répertoire {output_dir}: {os.listdir(output_dir)}")
+try:
+    results_df = pd.DataFrame(results)
+    results_df.to_html(output_html, index=False)
+    print(f"Résultats enregistrés dans {output_html}.")
+except Exception as e:
+    print(f"Erreur lors de l'exportation des résultats : {e}")
+    sys.exit(1)
