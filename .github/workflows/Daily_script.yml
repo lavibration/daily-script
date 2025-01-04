@@ -27,14 +27,9 @@ jobs:
 
       - name: Verify output file
         run: |
-          if [ ! -f "output/results.html" ]; then
-            echo "Error: output/results.html not found!"
+          if [ ! -f "docs/index.html" ]; then
+            echo "Error: docs/index.html not found!"
             exit 1
-
-      - name: Move output to docs
-        run: |
-          mkdir -p docs
-          mv output/* docs/
 
   deploy:
     needs: analysis
