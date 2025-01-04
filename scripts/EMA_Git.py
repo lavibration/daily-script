@@ -57,7 +57,7 @@ def find_ema_with_max_contacts_and_long_term(data, ema_periods, rolling_window=6
         ema = data['Close'].ewm(span=period, adjust=False).mean()
         data[f'EMA_{period}'] = ema
 
-        contacts = ((abs(data['Close'] - ema) / ema) <= tolerance).sum()
+        contacts = ((data['Close'] - ema).abs() / ema <= tolerance).sum()
 
         if contacts > max_contacts:
             max_contacts = contacts
@@ -85,18 +85,18 @@ for ticker in tickers:
         data = yf.download(ticker, period="5y", interval="1wk")
         volume_data = yf.download(ticker, period="1mo", interval="1d")
 
-        if data.empty or volume_data.empty:
-            print(f"Aucune donnée pour {ticker}.")
+        # Vérifications des données
+        if data.empty or 'Close' not in data.columns:
+            print(f"Données insuffisantes ou 'Close' manquant pour {ticker}.")
+            continue
+        if volume_data.empty or 'Volume' not in volume_data.columns:
+            print(f"Données insuffisantes ou 'Volume' manquant pour {ticker}.")
             continue
 
         avg_daily_volume = volume_data['Volume'].mean()
 
         if avg_daily_volume < volume_threshold:
             print(f"{ticker} exclu pour volume moyen quotidien < {volume_threshold}.")
-            continue
-
-        if 'Close' not in data.columns:
-            print(f"Données manquantes pour {ticker}. Colonne 'Close' absente.")
             continue
 
         best_ema, max_contacts, last_ema_value, z_score_max_contacts, \
@@ -129,6 +129,7 @@ for ticker in tickers:
         })
     except Exception as e:
         print(f"Erreur pour {ticker} ({name}): {e}")
+        print("Détails complets :", pd.DataFrame(data).head())
 
 # Exporter les résultats au format HTML
 try:
