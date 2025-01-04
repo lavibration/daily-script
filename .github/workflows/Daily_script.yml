@@ -30,6 +30,7 @@ jobs:
           if [ ! -f "docs/index.html" ]; then
             echo "Error: docs/index.html not found!"
             exit 1
+          fi # Add this line to properly close the if block
 
   deploy:
     needs: analysis
