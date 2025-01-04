@@ -37,6 +37,8 @@ except Exception as e:
 # Fonction de calcul du Z-Score
 def calculate_z_score(data, ema):
     rolling_std = (data['Close'] - ema).rolling(window=rolling_window).std()
+    if rolling_std.isnull().all():
+        raise ValueError("Impossible de calculer l'écart-type pour le Z-Score. Vérifiez les données.")
     z_scores = (data['Close'] - ema) / rolling_std
     return z_scores
 
@@ -55,7 +57,7 @@ def find_ema_with_max_contacts_and_long_term(data, ema_periods, rolling_window=6
         ema = data['Close'].ewm(span=period, adjust=False).mean()
         data[f'EMA_{period}'] = ema
 
-        contacts = (abs(data['Close'] - ema) / ema <= tolerance).sum()
+        contacts = ((abs(data['Close'] - ema) / ema) <= tolerance).sum()
 
         if contacts > max_contacts:
             max_contacts = contacts
@@ -91,6 +93,10 @@ for ticker in tickers:
 
         if avg_daily_volume < volume_threshold:
             print(f"{ticker} exclu pour volume moyen quotidien < {volume_threshold}.")
+            continue
+
+        if 'Close' not in data.columns:
+            print(f"Données manquantes pour {ticker}. Colonne 'Close' absente.")
             continue
 
         best_ema, max_contacts, last_ema_value, z_score_max_contacts, \
