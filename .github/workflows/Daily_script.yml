@@ -27,8 +27,8 @@ jobs:
 
       - name: Verify output file
         run: |
-          if [ ! -f "output/results.html" ]; then
-            echo "Error: output/results.html not found!"
+          if [ ! -f "docs/index.html" ]; then
+            echo "Error: docs/index.html not found!"
             exit 1
           fi
 
@@ -43,5 +43,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: output
+          publish_dir: docs
           publish_branch: gh-pages
