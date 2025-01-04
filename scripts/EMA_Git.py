@@ -7,8 +7,8 @@ ema_periods = list(range(60, 321, 10))
 rolling_window = 60
 tolerance = 0.01
 input_file = "Euronext_Tickers.xlsx"  # Nom du fichier Excel dans le dépôt
-output_dir = "output"
-output_html = os.path.join(output_dir, "results.html")
+output_dir = "docs"  # Répertoire compatible avec GitHub Pages
+output_html = os.path.join(output_dir, "index.html")  # Génération du fichier index.html
 long_term_ema_min_period = 220
 volume_threshold = 5000
 
