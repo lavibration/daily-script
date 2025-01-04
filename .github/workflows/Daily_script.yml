@@ -36,7 +36,7 @@ jobs:
           git add docs/index.html
           git commit -m "Ajout de index.html"
           git fetch origin gh-pages
-          git merge origin/gh-pages --no-edit  # Merge les changements distants de gh-pages
+          git merge origin/gh-pages --no-edit --allow-unrelated-histories  # Autoriser la fusion des historiques non liés
           git push origin HEAD:gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
