@@ -83,6 +83,9 @@ for ticker in tickers:
     print(f"Analyse de {ticker} ({name})...")
     try:
         data = yf.download(ticker, period="5y", interval="1wk")
+        if data.empty:
+        raise ValueError(f"Les données pour {ticker} sont vides. Vérifiez l'API yfinance ou les paramètres.")
+        
         volume_data = yf.download(ticker, period="1mo", interval="1d")
 
         # Vérifications des données
