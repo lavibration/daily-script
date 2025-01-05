@@ -25,28 +25,12 @@ jobs:
       - name: Run analysis
         run: python scripts/EMA_Git.py
 
-      - name: Vérifier la présence du fichier
+      - name: Validate output
         run: |
-          ls -l docs/index.html
-
-      - name: Commit and push index.html to gh-pages branch
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add docs/index.html
-          git commit -m "Ajout de index.html"
-          git fetch origin gh-pages
-          git merge origin/gh-pages --no-edit --allow-unrelated-histories  # Autoriser la fusion des historiques non liés
-          git push origin HEAD:gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  deploy:
-    needs: analysis
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+          if [ ! -f docs/index.html ]; then
+            echo "Le fichier index.html est introuvable. Vérifiez le script."
+            exit 1
+          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
