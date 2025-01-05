@@ -27,7 +27,7 @@ jobs:
 
       - name: Validate output
         run: |
-          if [ ! -f docs/index.html ]; then
+          if [ ! -f index.html ]; then
             echo "Le fichier index.html est introuvable. Vérifiez le script."
             exit 1
           fi
@@ -36,5 +36,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs
-          publish_branch: gh-pages
+          publish_dir: . # Publie le contenu directement à la racine de la branche main
+          publish_branch: main # La branche main est utilisée pour GitHub Pages
