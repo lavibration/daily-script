@@ -7,17 +7,9 @@ ema_periods = list(range(60, 321, 10))
 rolling_window = 60
 tolerance = 0.01
 input_file = "Euronext_Tickers.xlsx"  # Nom du fichier Excel dans le dépôt
-output_dir = "docs"  # Répertoire compatible avec GitHub Pages
-output_html = os.path.join(output_dir, "index.html")  # Génération du fichier index.html
+output_html = "index.html"  # Génération du fichier index.html directement à la racine
 long_term_ema_min_period = 220
 volume_threshold = 5000
-
-# Créer le répertoire de sortie s'il n'existe pas
-try:
-    os.makedirs(output_dir, exist_ok=True)
-except Exception as e:
-    print(f"Erreur lors de la création du répertoire {output_dir}: {e}")
-    exit(1)
 
 # Charger les tickers et leurs noms depuis le fichier Excel
 try:
