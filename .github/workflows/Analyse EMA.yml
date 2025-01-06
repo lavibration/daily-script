@@ -1,0 +1,40 @@
+name: Analyse EMA
+
+on:
+  schedule:
+    - cron: '0 20 * * *' # Planification quotidienne à 20h (UTC)
+  workflow_dispatch: # Permet aussi d'exécuter manuellement le workflow
+
+jobs:
+  analysis:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run analysis
+        run: python scripts/EMA_Git.py
+
+      - name: Validate output
+        run: |
+          if [ ! -f index.html ]; then
+            echo "Le fichier index.html est introuvable. Vérifiez le script."
+            exit 1
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: . # Publie le contenu directement à la racine de la branche main
+          publish_branch: main # La branche main est utilisée pour GitHub Pages
