@@ -31,7 +31,7 @@ jobs:
       - name: EMA_Git.py
         run: |
           mkdir -p docs
-          python your_script.py # Remplacez par le nom de votre fichier Python
+          python EMA_Git.py # Remplacez par le nom de votre fichier Python
 
       # Étape 5 : Validation du fichier de sortie
       - name: Validate output
