@@ -28,7 +28,7 @@ jobs:
           pip install pandas yfinance openpyxl
 
       # Étape 4 : Exécution du script Python
-      - name: Run analysis script
+      - name: EMA_Git.py
         run: |
           mkdir -p docs
           python your_script.py # Remplacez par le nom de votre fichier Python
