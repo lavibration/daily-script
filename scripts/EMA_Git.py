@@ -7,9 +7,12 @@ ema_periods = list(range(60, 321, 10))
 rolling_window = 60
 tolerance = 0.01
 input_file = "Euronext_Tickers.xlsx"  # Nom du fichier Excel dans le dépôt
-output_html = "index.html"  # Génération du fichier index.html directement à la racine
+output_html = "docs/index.html"  # Génération du fichier index.html dans le répertoire "docs"
 long_term_ema_min_period = 220
 volume_threshold = 5000
+
+# Assurez-vous que le répertoire "docs" existe
+os.makedirs("docs", exist_ok=True)
 
 # Charger les tickers et leurs noms depuis le fichier Excel
 try:
