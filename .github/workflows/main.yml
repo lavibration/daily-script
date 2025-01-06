@@ -1,39 +1,30 @@
-name: Analyse EMA et déploiement
+name: Analyse EMA
 
 on:
-  push:
-    branches:
-      - main # Déclenchement sur la branche "main"
-  workflow_dispatch: # Permet d'exécuter le workflow manuellement
+  schedule:
+    - cron: '0 20 * * *' # Planification quotidienne à 20h (UTC)
+  workflow_dispatch: # Permet aussi d'exécuter manuellement le workflow
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-
+  analysis:
+    runs-on: ubuntu-22.04
     steps:
-      # Étape 1 : Vérification du dépôt
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # Étape 2 : Configuration de Python
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Setup Python
+        uses: actions/setup-python@v3
         with:
-          python-version: '3.9'
+          python-version: 3.9
 
-      # Étape 3 : Installation des dépendances
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install pandas yfinance openpyxl
+          pip install --upgrade pip
+          pip install -r requirements.txt
 
-      # Étape 4 : Exécution du script Python
-      - name: EMA_Git.py
-        run: |
-          mkdir -p docs
-          python EMA_Git.py # Remplacez par le nom de votre fichier Python
+      - name: Run analysis
+        run: python scripts/EMA_Git.py
 
-      # Étape 5 : Validation du fichier de sortie
       - name: Validate output
         run: |
           if [ ! -f docs/index.html ]; then
@@ -41,7 +32,6 @@ jobs:
             exit 1
           fi
 
-      # Étape 6 : Déploiement sur GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
