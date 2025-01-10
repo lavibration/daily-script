@@ -1,4 +1,16 @@
-<table border="1" class="dataframe">
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Résultats EMA</title>
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+        </head>
+        <body>
+            <h1>Analyse EMA</h1>
+            <table id="dataTable">
+                <table border="1" class="dataframe display">
   <thead>
     <tr style="text-align: right;">
       <th>Ticker</th>
@@ -2041,6 +2053,21 @@
       <td></td>
       <td>-32.23</td>
       <td>-4.75</td>
+    </tr>
+    <tr>
+      <td>ALBI.PA</td>
+      <td>GASCOGNE</td>
+      <td>2.50</td>
+      <td>320</td>
+      <td>3.46</td>
+      <td></td>
+      <td>-27.65</td>
+      <td>-3.02</td>
+      <td>320</td>
+      <td>3.46</td>
+      <td></td>
+      <td>-27.65</td>
+      <td>-3.02</td>
     </tr>
     <tr>
       <td>GFC.PA</td>
@@ -5029,3 +5056,14 @@
     </tr>
   </tbody>
 </table>
+            </table>
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                    $('#dataTable').DataTable();
+                });
+            </script>
+        </body>
+        </html>
+        
