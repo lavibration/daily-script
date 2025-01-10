@@ -133,33 +133,43 @@ try:
     if results_df.empty:
         print("Aucun résultat à exporter.")
     else:
-        table_html = results_df.to_html(classes='display', index=False)
-        html_output = f"""
+         # Convertir le DataFrame en HTML et ajouter des options DataTables
+        table_html = results_df.to_html(index=False, classes="display")
+        
+        # Ajouter les ressources CSS et JS de DataTables
+        html_template = f"""
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="fr">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Résultats EMA</title>
-            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+            <title>Résultats EMA Analysis</title>
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
         </head>
         <body>
-            <h1>Analyse EMA</h1>
-            <table id="dataTable">
+            <h1>Analyse des EMA</h1>
+            <table id="resultsTable" class="display">
                 {table_html}
             </table>
-            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-            <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
             <script>
                 $(document).ready(function() {{
-                    $('#dataTable').DataTable();
+                    $('#resultsTable').DataTable({{
+                        paging: true,
+                        searching: true,
+                        info: true,
+                        ordering: true
+                    }});
                 }});
             </script>
         </body>
         </html>
         """
+
+        # Enregistrer le fichier HTML dans le répertoire docs
         with open(output_html, "w", encoding="utf-8") as f:
-            f.write(html_output)
-        print(f"Résultats interactifs enregistrés dans {output_html}.")
+            f.write(html_template)
+        print(f"Résultats enregistrés dans {output_html}.")
 except Exception as e:
     print(f"Erreur lors de l'exportation des résultats : {e}")
