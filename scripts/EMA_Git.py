@@ -6,8 +6,8 @@ import os
 ema_periods = list(range(60, 321, 10))
 rolling_window = 60
 tolerance = 0.01
-input_file = "Euronext_Tickers.xlsx"  # Nom du fichier Excel dans le dépôt
-output_html = "docs/index.html"  # Génération du fichier index.html dans le répertoire "docs"
+input_file = "Euronext_Tickers.xlsx"
+output_html = "docs/index.html"
 long_term_ema_min_period = 220
 volume_threshold = 5000
 
@@ -83,7 +83,6 @@ for ticker in tickers:
         
         volume_data = yf.download(ticker, period="1mo", interval="1d")
 
-        # Vérifications des données
         if data.empty or 'Close' not in data.columns:
             print(f"Données insuffisantes ou 'Close' manquant pour {ticker}.")
             continue
@@ -127,15 +126,40 @@ for ticker in tickers:
         })
     except Exception as e:
         print(f"Erreur pour {ticker} ({name}): {e}")
-        print("Détails complets :", pd.DataFrame(data).head())
 
-# Exporter les résultats au format HTML
+# Générer le tableau avec DataTables
 try:
     results_df = pd.DataFrame(results)
     if results_df.empty:
         print("Aucun résultat à exporter.")
     else:
-        results_df.to_html(output_html, index=False)
-        print(f"Résultats enregistrés dans {output_html}.")
+        table_html = results_df.to_html(classes='display', index=False)
+        html_output = f"""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Résultats EMA</title>
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+        </head>
+        <body>
+            <h1>Analyse EMA</h1>
+            <table id="dataTable">
+                {table_html}
+            </table>
+            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+            <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+            <script>
+                $(document).ready(function() {{
+                    $('#dataTable').DataTable();
+                }});
+            </script>
+        </body>
+        </html>
+        """
+        with open(output_html, "w", encoding="utf-8") as f:
+            f.write(html_output)
+        print(f"Résultats interactifs enregistrés dans {output_html}.")
 except Exception as e:
     print(f"Erreur lors de l'exportation des résultats : {e}")
