@@ -1,15 +1,17 @@
 
         <!DOCTYPE html>
-        <html lang="en">
+        <html lang="fr">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Résultats EMA</title>
-            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+            <title>Résultats EMA Analysis</title>
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
         </head>
         <body>
-            <h1>Analyse EMA</h1>
-            <table id="dataTable">
+            <h1>Analyse des EMA</h1>
+            <table id="resultsTable" class="display">
                 <table border="1" class="dataframe display">
   <thead>
     <tr style="text-align: right;">
@@ -2057,17 +2059,17 @@
     <tr>
       <td>ALBI.PA</td>
       <td>GASCOGNE</td>
-      <td>2.50</td>
-      <td>320</td>
-      <td>3.46</td>
+      <td>2.53</td>
+      <td>60</td>
+      <td>2.98</td>
       <td></td>
-      <td>-27.65</td>
-      <td>-3.02</td>
-      <td>320</td>
-      <td>3.46</td>
+      <td>-15.23</td>
+      <td>-2.69</td>
+      <td>220</td>
+      <td>3.45</td>
       <td></td>
-      <td>-27.65</td>
-      <td>-3.02</td>
+      <td>-26.69</td>
+      <td>-3.26</td>
     </tr>
     <tr>
       <td>GFC.PA</td>
@@ -5057,11 +5059,14 @@
   </tbody>
 </table>
             </table>
-            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-            <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
             <script>
                 $(document).ready(function() {
-                    $('#dataTable').DataTable();
+                    $('#resultsTable').DataTable({
+                        paging: true,
+                        searching: true,
+                        info: true,
+                        ordering: true
+                    });
                 });
             </script>
         </body>
